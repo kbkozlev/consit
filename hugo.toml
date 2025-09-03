@@ -99,5 +99,4 @@ theme = "consit"
   twitterHandle      = ""    # e.g. "@yourhandle"
   robotsIndex        = true
   titleSeparator     = " | "
-  # Pattern matches your old head.html logic:
   titlePattern       = "{{ if or .IsHome (eq .PageTitle .SiteTitle) }}{{ .SiteTitle }}{{ else }}{{ .PageTitle }}{{ .Sep }}{{ .SiteTitle }}{{ end }}"
