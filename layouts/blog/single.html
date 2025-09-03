@@ -1,0 +1,27 @@
+{{ define "main" }}
+<section class="section">
+  <div class="container">
+    <article class="card">
+      <header>
+        <h1 style="margin-top:0">{{ .Title }}</h1>
+        <p class="post-meta muted" style="margin:.25rem 0 1rem">
+          {{ .Date.Format "02 Jan 2006" }}
+          {{ with .ReadingTime }} • {{ . }} min read{{ end }}
+          {{ with .Params.tags }}
+            • {{ range $i, $t := . }}{{ if $i }}, {{ end }}<a href="{{ (printf "/tags/%s/" $t) | relURL }}">{{ $t }}</a>{{ end }}
+          {{ end }}
+        </p>
+      </header>
+
+      <div class="content">
+        {{ .Content }}
+      </div>
+
+      <footer style="margin-top:2rem;display:flex;justify-content:space-between;gap:1rem">
+        {{ with .PrevInSection }}<a class="btn" href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ end }}
+        {{ with .NextInSection }}<a class="btn" href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}
+      </footer>
+    </article>
+  </div>
+</section>
+{{ end }}

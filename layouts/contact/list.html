@@ -1,0 +1,165 @@
+{{ define "main" }}
+{{ $form := .Params.contactForm }}
+
+{{ $positions := where .Site.RegularPages "Section" "positions" }}
+{{ $limit := or .Params.positionsOnContact 6 }}
+{{ $sorted := ($positions.ByDate.Reverse) }}
+{{ $total := len $sorted }}
+{{ $slice := first $limit $sorted }}
+
+<section class="section">
+  <div class="container">
+
+    <div class="section-head" style="text-align:left">
+      <h2>{{ .Title }}</h2>
+      {{ with .Params.intro }}<p class="muted">{{ . }}</p>{{ end }}
+    </div>
+
+    {{ if and $form.enable $form.formAction }}
+      {{/* ================= 2-COLUMN LAYOUT (form enabled) ================ */}}
+      <div class="contact-grid">
+        <aside class="card">
+          <h3 style="margin-top:0">Open positions</h3>
+
+          {{ if $slice }}
+            <div class="grid" style="gap:1rem">
+              {{ range $slice }}
+                <article class="card" style="padding:1rem;border-radius:14px">
+                  <h4 style="margin:.2rem 0 .4rem">
+                    <a href="{{ .RelPermalink }}" style="text-decoration:none">{{ .Title }}</a>
+                  </h4>
+                  {{ with .Params.location }}
+                    <p class="muted" style="margin:.1rem 0 .6rem">{{ . }}</p>
+                  {{ end }}
+                  <p class="muted" style="margin:0 0 .8rem">
+                    {{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary }}{{ end }}
+                  </p>
+                  <div>
+                    <a class="btn" href="{{ .RelPermalink }}">Read more →</a>
+                  </div>
+                </article>
+              {{ end }}
+            </div>
+
+            {{ if gt $total $limit }}
+              <div class="service-actions" style="margin-top:1rem">
+                <a class="btn" href="{{ "positions" | relURL }}">View all positions →</a>
+              </div>
+            {{ end }}
+          {{ else }}
+            <p class="muted" style="margin:0">No open positions at the moment.</p>
+          {{ end }}
+        </aside>
+
+        <form id="contactForm"
+              class="card contact-form"
+              action="{{ $form.formAction }}"
+              method="POST"
+              data-success="Thanks! Your message was sent."
+              data-error="Oops, something went wrong."
+              data-tryagain="Please try again.">
+
+          <h3 style="margin-top:0">{{ .Params.formHeading }}</h3>
+
+          <!-- Honeypot -->
+          <input type="text" name="honeypot" tabindex="-1" autocomplete="off" style="display:none">
+
+          <div class="form-grid">
+            <div class="field"><label>First name
+              <input class="control" type="text" name="first_name" required></label></div>
+            <div class="field"><label>Last name
+              <input class="control" type="text" name="last_name" required></label></div>
+            <div class="field span-2"><label>Email
+              <input class="control" type="email" name="email" required></label></div>
+            <div class="field span-2"><label>Company
+              <input class="control" type="text" name="company"></label></div>
+            <div class="field span-2"><label>Message
+              <textarea class="control" name="message" rows="6" required></textarea></label></div>
+          </div>
+
+          {{ with $form.accessKey }}<input type="hidden" name="accessKey" value="{{ . }}">{{ end }}
+          {{ with $form.subject   }}<input type="hidden" name="subject"   value="{{ . }}">{{ end }}
+          <input type="hidden" name="replyTo" value="{{ or $form.replyTo "@" }}">
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Send</button>
+            {{ with .Params.responseHint }}
+              <span class="muted">{{ . }}</span>
+            {{ end }}
+          </div>
+
+          <div id="contactFormMsg" class="muted" style="margin-top:.8rem" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <script>
+      (function(){
+        const form = document.getElementById('contactForm');
+        const msg  = document.getElementById('contactFormMsg');
+        if (!form || !msg) return;
+
+        function setMsg(text, ok){ msg.textContent = text; msg.style.color = ok ? 'var(--text)' : 'tomato'; }
+
+        form.addEventListener('submit', async function(e){
+          e.preventDefault();
+          setMsg('', true);
+
+          const successText = form.dataset.success || 'Thanks! Your message was sent.';
+          const errorText   = form.dataset.error   || 'Something went wrong.';
+          const tryAgain    = form.dataset.tryagain|| 'Please try again.';
+
+          const data = new FormData(form);
+          const fn = (data.get('first_name')||'').trim();
+          const ln = (data.get('last_name')||'').trim();
+          if(!data.get('name')) data.set('name', (fn + ' ' + ln).trim());
+
+          try{
+            const resp = await fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body:data });
+            let ok = resp.ok;
+            try{ const json = await resp.json(); if(typeof json.success !== 'undefined') ok = !!json.success; }catch(_){}
+            if(ok){ setMsg(successText,true); form.reset(); if(window.grecaptcha) grecaptcha.reset(); }
+            else  { setMsg(`${errorText} ${tryAgain}`,false); }
+          }catch(_){ setMsg(`${errorText} ${tryAgain}`,false); }
+        });
+      })();
+      </script>
+
+    {{ else }}
+      {{/* ================ SINGLE FULL-WIDTH CARD (form disabled) ================ */}}
+      <div class="card" style="padding:1.25rem 1.25rem 1.35rem">
+        <h3 style="margin-top:0">Open positions</h3>
+
+        {{ if $slice }}
+          <div class="grid" style="gap:1rem">
+            {{ range $slice }}
+              <article class="card" style="padding:1rem;border-radius:14px">
+                <h4 style="margin:.2rem 0 .4rem">
+                  <a href="{{ .RelPermalink }}" style="text-decoration:none">{{ .Title }}</a>
+                </h4>
+                {{ with .Params.location }}
+                  <p class="muted" style="margin:.1rem 0 .6rem">{{ . }}</p>
+                {{ end }}
+                <p class="muted" style="margin:0 0 .8rem">
+                  {{ with .Params.summary }}{{ . }}{{ else }}{{ .Summary }}{{ end }}
+                </p>
+                <div>
+                  <a class="btn" href="{{ .RelPermalink }}">Read more →</a>
+                </div>
+              </article>
+            {{ end }}
+          </div>
+
+          {{ if gt $total $limit }}
+            <div class="service-actions" style="margin-top:1rem">
+              <a class="btn" href="{{ "positions" | relURL }}">View all positions →</a>
+            </div>
+          {{ end }}
+        {{ else }}
+          <p class="muted" style="margin:0">No open positions at the moment.</p>
+        {{ end }}
+      </div>
+    {{ end }}
+
+  </div>
+</section>
+{{ end }}

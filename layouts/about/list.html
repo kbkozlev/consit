@@ -1,0 +1,71 @@
+{{ define "main" }}
+<section class="section">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="section-head">
+      <h2>{{ .Title }}</h2>
+      {{ with .Params.intro }}<p class="muted">{{ . }}</p>{{ end }}
+    </div>
+
+    <!-- Highlights (cards) -->
+    {{ with .Params.highlights }}
+      <div class="grid cols-3" style="margin-top:1.2rem">
+        {{ range . }}
+          <article class="card">
+            <h3 style="margin-top:0">{{ .title }}</h3>
+            <p class="muted">{{ .text }}</p>
+          </article>
+        {{ end }}
+      </div>
+    {{ end }}
+
+    <!-- Stats row -->
+    {{ with .Params.stats }}
+      <div class="grid cols-3" style="margin-top:1.5rem">
+        {{ range . }}
+          <div class="card" style="text-align:center">
+            <div style="font-size:1.6rem;font-weight:700">{{ .value }}</div>
+            <div class="muted">{{ .label }}</div>
+          </div>
+        {{ end }}
+      </div>
+    {{ end }}
+
+    <!-- Main narrative content (Markdown body of _index.md) -->
+    {{ if .Content }}
+      <article class="card" style="margin-top:1.8rem">
+        <div class="content">
+          {{ .Content }}
+        </div>
+      </article>
+    {{ end }}
+
+    <!-- Team -->
+    {{ with .Params.team }}
+      <div class="section-head" style="margin-top:2rem">
+        <h2>Team</h2>
+      </div>
+      <div class="grid cols-3">
+        {{ range . }}
+          <article class="card">
+            <h3 style="margin:0">{{ .name }}</h3>
+            <p class="muted" style="margin:.1rem 0 .6rem">{{ .role }}</p>
+            {{ with .bio }}<p class="muted">{{ . }}</p>{{ end }}
+          </article>
+        {{ end }}
+      </div>
+    {{ end }}
+
+    <!-- CTA -->
+    {{ if or .Params.ctaText .Params.ctaHref }}
+      <div style="margin-top:2rem">
+        <a class="btn primary" href="{{ (.Params.ctaHref | default "/contact/") | relURL }}">
+          {{ or .Params.ctaText "Contact us" }}
+        </a>
+      </div>
+    {{ end }}
+
+  </div>
+</section>
+{{ end }}

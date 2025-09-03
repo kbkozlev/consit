@@ -1,0 +1,43 @@
+<header class="site-header">
+  <div class="container nav">
+    <a class="logo" href="{{ .Site.BaseURL | relURL }}">
+      {{- $hdr  := $.Site.Params.header -}}
+      {{- $size := default 32 $hdr.logoSize -}}
+
+      {{ if $hdr.logoIcon }}
+        <img
+          src="{{ $hdr.logoIcon | relURL }}"
+          alt="{{ or $hdr.companyName $.Site.Title }}"
+          class="logo-icon"
+          style="max-height: {{ $size }}px;"
+          loading="lazy" decoding="async">
+      {{ else }}
+        <span class="mark" style="width:{{ $size }}px; height:{{ $size }}px;"></span>
+      {{ end }}
+
+      {{ if not $hdr.logoOnly }}
+        <span>{{ or $hdr.companyName $.Site.Title }}</span>
+      {{ end }}
+    </a>
+
+    <div class="nav-right">
+      {{/* Build menu from Hugo menu OR params.header.menu */}}
+      {{- $items := .Site.Menus.main -}}
+      {{- if not $items -}}
+        {{- $items = slice -}}
+        {{- with $.Site.Params.header.menu -}}
+          {{- range . -}}
+            {{- $items = $items | append (dict "URL" (.url | relURL) "Name" .name) -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+
+      <nav>
+        {{- range $items -}}
+          <a href="{{ .URL }}">{{ .Name }}</a>
+        {{- end -}}
+      </nav>
+      {{/* No theme toggle button */}}
+    </div>
+  </div>
+</header>

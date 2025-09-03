@@ -1,0 +1,59 @@
+{{ $footer := .Site.Params.footer | default (dict) }}
+{{ $showBrand := default false (index $footer "showBrand") }}
+{{ $cols := index $footer "columns" }}
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-row">
+      {{ if $showBrand }}
+        <section class="footer-brand">
+          <a class="logo" href="{{ .Site.BaseURL | relURL }}">
+            {{ if .Site.Params.header.logoIcon }}
+              <img src="{{ .Site.Params.header.logoIcon | relURL }}"
+                   alt="{{ or .Site.Params.header.companyName (.Site.Params.company.name | default .Site.Title) }}"
+                   class="logo-icon" width="32" height="32" loading="lazy" decoding="async">
+            {{ else }}
+              <span class="mark"></span>
+            {{ end }}
+            <span>{{ or .Site.Params.header.companyName (.Site.Params.company.name | default .Site.Title) }}</span>
+          </a>
+        </section>
+      {{ end }}
+
+      <div class="footer-right">
+        {{ with $cols }}
+          {{ range . }}
+            <section class="footer-col">
+              {{ with .title }}<h3>{{ . }}</h3>{{ end }}
+              {{ with .items }}
+                <ul>
+                  {{ range . }}
+                    {{ $labelRaw := index . "label" }}
+                    {{ $url      := index . "url" }}
+                    {{ $label    := (replace $labelRaw "\n" "<br>") | safeHTML }}
+                    <li>
+                      {{ if $url }}
+                        {{ if or (hasPrefix $url "http") (hasPrefix $url "mailto:") (hasPrefix $url "tel:") }}
+                          <a href="{{ $url }}" 
+                             {{ if hasPrefix $url "http" }}target="_blank" rel="noopener noreferrer"{{ end }}>
+                            {{ $label }}
+                          </a>
+                        {{ else }}
+                          <a href="{{ $url | relURL }}">{{ $label }}</a>
+                        {{ end }}
+                      {{ else }}
+                        <span class="muted">{{ $label }}</span>
+                      {{ end }}
+                    </li>
+                  {{ end }}
+                </ul>
+              {{ end }}
+            </section>
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+
+    <p class="muted footer-copy">© {{ now.Year }} {{ .Site.Params.company.name | default .Site.Title }}. All rights reserved.</p>
+  </div>
+</footer>

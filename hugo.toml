@@ -1,0 +1,110 @@
+baseURL = ''
+languageCode = 'en-us'
+title = 'My Company'
+theme = "consit"
+
+
+[pagination]
+  pagerSize = 9
+
+[params.theme]
+  color = "#0b1020"
+
+[params.favicon]
+  icon = "/favicon/favicon.png"
+
+
+[params.header]
+  logoIcon     = "/logo/logo.png"
+  companyName  = ""
+  logoOnly    = true
+  logoSize    = 32  
+
+  [[params.header.menu]]
+    name = "About Us"
+    url  = "/about/"
+
+  [[params.header.menu]]
+    name = "Services"
+    url  = "/services/"
+  
+  [[params.header.menu]]
+    name = "Blog"
+    url  = "/blog/"
+
+  [[params.header.menu]]
+    name = "Contact"
+    url  = "/contact/"
+
+
+[params.hero]
+  title         = "My Website Title"
+  subtitle      = "Delivering  solutions with years of proven implementation and integration experience with technology."
+
+  primaryText   = "Contact Us"
+  primaryHref   = "/contact/"
+
+  secondaryText = "Learn More"
+  secondaryHref = "/about/"
+
+
+[params.services]
+  title = "Expertise"
+  intro = "What we help with across."
+
+  featured = [
+    "/services/serivce1/",
+    "/services/serivce2/",
+    "/services/serivce3/",
+    "/services/serivce4/",
+  ]
+
+
+[params.blog]
+  title = "Latest Blog Posts"
+  intro = "Insights and updates from our experts."
+  
+[params.footer]
+  showBrand = true
+
+  # Column 1
+  [[params.footer.columns]]
+    title = "Contact"
+    items = [
+      { label = "info@test.net", url = "mailto:info@test.net" },
+      { label = "+1234567890",  url = "tel:+1234567890" },
+      { label = "My address", url = "https://maps.app.goo.gl/test"}
+    ]
+
+  # Column 2
+  [[params.footer.columns]]
+    title = "Follow"
+    items = [
+      { label = "LinkedIn", url = "https://www.linkedin.com/company/test" },
+      { label = "Twitter",  url = "https://twitter.com/example" }
+    ]
+
+  # Column 3
+  [[params.footer.columns]]
+    title = "Legal"
+    items = [
+      { label = "Privacy Policy", url = "/privacy/" },
+      { label = "Terms of Service", url = "/terms/" }
+    ]
+
+
+[params]
+  positionsOnContact = 2
+
+
+
+[params.contactForm]
+  enable = true                # set to false to hide the form entirely
+  formAction = "https://api.staticforms.xyz/submit"
+  accessKey = ""   # required by StaticForms
+  subject  = "Website Contact"
+  replyTo  = "@"
+  enableCaptcha = false
+  captchaSiteKey = ""         # only if you enable reCAPTCHA
+
+

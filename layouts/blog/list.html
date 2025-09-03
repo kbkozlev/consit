@@ -1,0 +1,43 @@
+{{ define "main" }}
+<section class="section blog">
+  <div class="container">
+    <div class="section-head">
+      <h2>{{ .Title | default "Blog" }}</h2>
+      {{ with .Params.description }}<p class="muted">{{ . }}</p>{{ end }}
+    </div>
+
+    <div class="grid cols-3">
+      {{ $pages := .Pages.ByDate.Reverse }}
+      {{ $p := .Paginate $pages }}
+      {{ range $p.Pages }}
+        <article class="card">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+
+          <p class="post-meta muted" style="margin:.25rem 0 .75rem">
+            {{ .Date.Format "02 Jan 2006" }}
+            {{ with .ReadingTime }} • {{ . }} min read{{ end }}
+          </p>
+
+          {{ with .Params.summary }}
+            <p class="muted">{{ . }}</p>
+          {{ else }}
+            <p class="muted">{{ .Summary }}</p>
+          {{ end }}
+
+          <div class="service-actions">
+            <a class="btn" href="{{ .RelPermalink }}">Read more →</a>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+
+    {{/* Pager */}}
+    {{ with $p }}
+      <nav class="pager" style="display:flex;gap:.6rem;justify-content:center;margin-top:2rem">
+        {{ if .HasPrev }}<a class="btn" href="{{ .Prev.URL }}">← Newer</a>{{ end }}
+        {{ if .HasNext }}<a class="btn" href="{{ .Next.URL }}">Older →</a>{{ end }}
+      </nav>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,31 @@
+{{- /* ========= Title & Description ========= */ -}}
+{{- $title := .Title -}}
+{{- $siteTitle := .Site.Title -}}
+{{- $desc := cond (ne .Description "") .Description .Site.Params.description -}}
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>
+  {{- if or .IsHome (eq (default "" $title) "") -}}
+    {{- $siteTitle -}}
+  {{- else if eq $title $siteTitle -}}
+    {{- $siteTitle -}}
+  {{- else -}}
+    {{- $title }} | {{ $siteTitle -}}
+  {{- end -}}
+</title>
+
+{{- with $desc }}<meta name="description" content="{{ . }}">{{ end }}
+
+{{- /* ========= Theme Color (configurable) ========= */ -}}
+{{- $themeColor := (or .Site.Params.theme.color "#0b1020") -}}
+<meta name="theme-color" content="{{ $themeColor }}">
+
+{{- /* ========= Styles ========= */ -}}
+{{- $css := resources.Get "css/theme.css" | fingerprint -}}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+
+{{- $fav := or .Site.Params.favicon.icon "favicon.ico" -}}
+<link rel="icon" href="{{ $fav | relURL }}">

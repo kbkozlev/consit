@@ -1,0 +1,13 @@
+{{ define "main" }}
+<section class="section">
+  <div class="container">
+    <article class="card">
+      <h1 style="margin-top:0">{{ .Title }}</h1>
+      {{ with .Params.summary }}<p class="muted" style="margin-top:.2rem">{{ . }}</p>{{ end }}
+      <div class="content" style="margin-top:1rem">
+        {{ .Content }}
+      </div>
+    </article>
+  </div>
+</section>
+{{ end }}

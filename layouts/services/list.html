@@ -1,0 +1,22 @@
+{{ define "main" }}
+<section class="section services">
+  <div class="container">
+    <div class="section-head">
+      <h2>{{ .Title | default "Services" }}</h2>
+      {{ with .Params.description }}<p class="muted">{{ . }}</p>{{ end }}
+    </div>
+
+    <div class="grid cols-3">
+      {{ range .Pages.ByWeight }}
+        <article class="card">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          {{ with .Params.summary }}<p class="muted">{{ . }}</p>{{ else }}<p class="muted">{{ .Summary }}</p>{{ end }}
+          <div class="service-actions">
+            <a class="btn" href="{{ .RelPermalink }}">Read more →</a>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

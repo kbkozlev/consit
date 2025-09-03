@@ -1,0 +1,98 @@
+{{ define "main" }}
+{{ $h  := .Site.Params.hero }}
+{{ $sv := .Site.Params.services }}
+
+<!-- ===== Hero Section ===== -->
+<section class="hero">
+  <div class="container">
+    <h1>{{ or $h.title "Company Hero" }}</h1>
+
+    {{ with (or $h.subtitle "What do we do?") }}
+      <p>{{ . }}</p>
+    {{ end }}
+
+    {{ if or $h.primaryText $h.secondaryText }}
+      <div class="hero-actions">
+        {{ with $h.primaryText }}
+          <a class="btn primary" href="{{ ($h.primaryHref | default "contact") | relURL }}">
+            {{ . }}
+          </a>
+        {{ end }}
+        {{ with $h.secondaryText }}
+          <a class="btn" href="{{ ($h.secondaryHref | default "services") | relURL }}">
+            {{ . }}
+          </a>
+        {{ end }}
+      </div>
+    {{ end }}
+  </div>
+</section>
+
+<!-- ===== Featured Services (only if at least one resolves) ===== -->
+{{/* Build a list of actual Pages from params.services.featured */}}
+{{ $featured := slice }}
+{{ with $sv.featured }}
+  {{ range . }}
+    {{ $p := site.GetPage . | default (site.GetPage (printf "services/%s" .)) }}
+    {{ with $p }}
+      {{ $featured = $featured | append . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ if gt (len $featured) 0 }}
+<section class="section services">
+  <div class="container">
+    <div class="section-head">
+      <h2>{{ with $sv.title }}{{ . }}{{ else }}Services{{ end }}</h2>
+      {{ with $sv.intro }}<p class="muted">{{ . }}</p>{{ end }}
+    </div>
+
+    <div class="grid cols-3">
+      {{ range $featured }}
+        <article class="card">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          {{ with .Params.summary }}<p class="muted">{{ . }}</p>{{ else }}<p class="muted">{{ .Summary }}</p>{{ end }}
+        </article>
+      {{ end }}
+    </div>
+
+    <div class="service-actions" style="text-align:center; margin-top:2rem;">
+      <a class="btn" href="{{ "services" | relURL }}">View all services →</a>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+<!-- ===== Blog Section (only if there are posts) ===== -->
+{{ $posts := where .Site.RegularPages "Section" "blog" }}
+{{ $posts = first 3 $posts }}
+
+{{ if gt (len $posts) 0 }}
+<section class="section blog">
+  <div class="container">
+    <div class="section-head">
+      <h2>{{ with .Site.Params.blog.title }}{{ . }}{{ else }}Latest Blog Posts{{ end }}</h2>
+      {{ with .Site.Params.blog.intro }}<p class="muted">{{ . }}</p>{{ end }}
+    </div>
+
+    <div class="grid cols-3">
+      {{ range $posts }}
+        <article class="card">
+          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          {{ with .Params.summary }}<p class="muted">{{ . }}</p>{{ else }}<p class="muted">{{ .Summary }}</p>{{ end }}
+          <div class="service-actions">
+            <a class="btn" href="{{ .RelPermalink }}">Read more →</a>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+
+    <div class="blog-actions" style="text-align:center; margin-top:2rem;">
+      <a class="btn" href="{{ "blog" | relURL }}">View all posts →</a>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{ end }}
