@@ -1,0 +1,6 @@
+{{- /* layouts/robots.txt */ -}}
+{{- $sitemap := (print "sitemap.xml" | absURL) -}}
+User-agent: *
+Allow: /
+
+Sitemap: {{ $sitemap }}

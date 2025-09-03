@@ -1,0 +1,106 @@
+{{- /* layouts/partials/seo.html */ -}}
+{{- $p := . -}}
+{{- $site := .Site -}}
+{{- $seo := $site.Params.seo -}}
+{{- $org := $site.Params.organization -}}
+
+{{/* ---------- Title ---------- */}}
+{{- $pageTitle := cond (ne $p.Title "") $p.Title $site.Title -}}
+{{- $sectionTitle := cond (ne $p.Section "") (title $p.Section) "" -}}
+{{- $sep := or $seo.titleSeparator " | " -}}
+{{- $pattern := or $seo.titlePattern "{{ .PageTitle }}{{ .Sep }}{{ .SiteTitle }}" -}}
+{{- $computedTitle := replace (replace (replace $pattern "{{ .PageTitle }}" $pageTitle) "{{ .SiteTitle }}" $site.Title) "{{ .Sep }}" $sep -}}
+{{- $computedTitle = replace $computedTitle "{{ .SectionTitle }}" $sectionTitle -}}
+
+<title>{{ $computedTitle }}</title>
+
+{{/* ---------- Description ---------- */}}
+{{- $desc := or $p.Params.description (or $p.Description $seo.defaultDescription) -}}
+{{- if $desc -}}<meta name="description" content="{{ $desc | plainify }}">{{ end }}
+
+{{/* ---------- Robots (site default + per page override + drafts) ---------- */}}
+{{- $indexDefault := cond (isset $seo "robotsIndex") $seo.robotsIndex true -}}
+{{- $noindex := or .Draft $p.Params.noindex (not $indexDefault) -}}
+{{- if $noindex -}}
+  <meta name="robots" content="noindex, nofollow">
+{{- else -}}
+  <meta name="robots" content="index, follow">
+{{- end }}
+
+{{/* ---------- Canonical ---------- */}}
+{{- $canonical := or $p.Params.canonical $p.Permalink -}}
+<link rel="canonical" href="{{ $canonical }}">
+
+{{/* ---------- Images (og/twitter) ---------- */}}
+{{- $img := "" -}}
+{{- with $p.Params.images }}{{ $img = (index . 0) }}{{ end }}
+{{- if not $img }}{{ $img = $seo.defaultImage }}{{ end }}
+{{- if not $img }}{{ $img = (or $org.logo "") }}{{ end }}
+{{- if $img }}
+<meta property="og:image" content="{{ $img | absURL }}">
+<meta name="twitter:image" content="{{ $img | absURL }}">
+{{- end }}
+
+{{/* ---------- Open Graph ---------- */}}
+<meta property="og:type" content="{{ if or $p.IsPage $p.IsNode }}website{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ $pageTitle }}">
+{{- if $desc }}<meta property="og:description" content="{{ $desc | plainify }}">{{ end }}
+<meta property="og:url" content="{{ $p.Permalink }}">
+<meta property="og:site_name" content="{{ or $seo.siteName $site.Title }}">
+
+{{/* ---------- Twitter ---------- */}}
+<meta name="twitter:card" content="summary_large_image">
+{{- with $seo.twitterHandle }}<meta name="twitter:site" content="{{ . }}">{{ end }}
+<meta name="twitter:title" content="{{ $pageTitle }}">
+{{- if $desc }}<meta name="twitter:description" content="{{ $desc | plainify }}">{{ end }}
+
+{{/* ---------- Theme color ---------- */}}
+{{- with $site.Params.theme.color }}<meta name="theme-color" content="{{ . }}">{{ end }}
+
+{{/* ---------- Hreflang (if multilingual) ---------- */}}
+{{- if .IsTranslated -}}
+  {{- range .AllTranslations -}}
+    <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  {{- end -}}
+  <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+{{- end }}
+
+{{/* ---------- JSON-LD: Organization (safe, no escaping) ---------- */}}
+{{- $sameAs := slice -}}
+{{- with $org.linkedin }}{{ $sameAs = $sameAs | append . }}{{ end }}
+{{- with $org.twitter  }}{{ $sameAs = $sameAs | append . }}{{ end }}
+{{- with $org.github   }}{{ $sameAs = $sameAs | append . }}{{ end }}
+{{- with $org.facebook }}{{ $sameAs = $sameAs | append . }}{{ end }}
+{{- with $org.instagram}}{{ $sameAs = $sameAs | append . }}{{ end }}
+{{- with $org.youtube  }}{{ $sameAs = $sameAs | append . }}{{ end }}
+
+{{- /* Build the Organization object as a map and let jsonify output valid JSON */ -}}
+{{- $orgData := dict
+    "@context" "https://schema.org"
+    "@type"    "Organization"
+    "name"     (or $org.name $site.Title)
+    "url"      (or $org.url (absURL "")) -}}
+
+{{- with $org.logo }}
+  {{- $orgData = merge $orgData (dict "logo" (absURL .)) -}}
+{{- end }}
+
+{{- if gt (len $sameAs) 0 }}
+  {{- $orgData = merge $orgData (dict "sameAs" $sameAs) -}}
+{{- end }}
+
+{{- if or $org.email $org.phone $org.areaServed $org.availableLanguage }}
+  {{- $contact := dict "@type" "ContactPoint" "contactType" "customer service" -}}
+  {{- with $org.email }}{{ $contact = merge $contact (dict "email" .) }}{{ end }}
+  {{- with $org.phone }}{{ $contact = merge $contact (dict "telephone" .) }}{{ end }}
+  {{- with $org.areaServed }}{{ $contact = merge $contact (dict "areaServed" .) }}{{ end }}
+  {{- with $org.availableLanguage }}
+    {{- /* accept string or array */ -}}
+    {{- $langs := . -}}
+    {{- $contact = merge $contact (dict "availableLanguage" $langs) -}}
+  {{- end }}
+  {{- $orgData = merge $orgData (dict "contactPoint" (slice $contact)) -}}
+{{- end }}
+
+<script type="application/ld+json">{{ $orgData | jsonify }}</script>
+

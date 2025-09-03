@@ -1,0 +1,15 @@
+{{- $org := .Site.Params.organization -}}
+
+{
+  "name": {{ or (printf "%q" (.Site.Params.seo.siteName)) (printf "%q" .Site.Title) }},
+  "short_name": {{ or (printf "%q" (.Site.Params.seo.siteName)) (printf "%q" .Site.Title) }},
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": {{ printf "%q" (or .Site.Params.theme.color "#ffffff") }},
+  "theme_color": {{ printf "%q" (or .Site.Params.theme.color "#ffffff") }},
+  "icons": [
+    {{- with $org.logo }}
+    { "src": {{ printf "%q" . }}, "sizes": "192x192", "type": "image/png" }
+    {{- end }}
+  ]
+}
