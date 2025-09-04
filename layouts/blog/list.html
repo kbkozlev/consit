@@ -18,11 +18,11 @@
             {{ with .ReadingTime }} • {{ . }} min read{{ end }}
           </p>
 
-          {{ with .Params.summary }}
-            <p class="muted">{{ . }}</p>
-          {{ else }}
-            <p class="muted">{{ .Summary }}</p>
-          {{ end }}
+          {{ $fmSum := trim .Params.summary " \t\r\n" }}
+          {{ $Sum := trim .Summary " \t\r\n" }}
+          {{ $summary := or $fmSum $Sum }}
+          <p class="muted card-summary">{{ $summary | plainify }}</p>
+
 
           <div class="service-actions">
             <a class="btn" href="{{ .RelPermalink }}">Read more →</a>

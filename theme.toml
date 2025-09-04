@@ -1,0 +1,12 @@
+name = "consit"
+license = "GPL-3.0"
+licenselink = "https://www.gnu.org/licenses/gpl-3.0.html"
+description = "A Hugo theme for consulting businesses. Includes services, careers, blog, and contact form."
+homepage = "https://github.com/kbkozlev/consit"
+tags = ["consulting", "business", "corporate", "services", "careers", "blog", "contact", "seo"]
+features = ["responsive", "seo-ready", "services-section", "positions-section", "blog", "contact-form", "dark-theme"]
+min_version = "0.118.0"
+
+[author]
+  name = "Kaloian Kozlev"
+  homepage = "https://vkpc.net/"

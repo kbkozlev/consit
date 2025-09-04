@@ -29,14 +29,11 @@
 </section>
 
 <!-- ===== Featured Services (only if at least one resolves) ===== -->
-{{/* Build a list of actual Pages from params.services.featured */}}
 {{ $featured := slice }}
 {{ with $sv.featured }}
   {{ range . }}
     {{ $p := site.GetPage . | default (site.GetPage (printf "services/%s" .)) }}
-    {{ with $p }}
-      {{ $featured = $featured | append . }}
-    {{ end }}
+    {{ with $p }}{{ $featured = $featured | append . }}{{ end }}
   {{ end }}
 {{ end }}
 
@@ -51,8 +48,26 @@
     <div class="grid cols-3">
       {{ range $featured }}
         <article class="card">
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          {{ with .Params.summary }}<p class="muted">{{ . }}</p>{{ else }}<p class="muted">{{ .Summary }}</p>{{ end }}
+          {{ with .Params.image }}
+            {{ $img := . }}
+            {{ if or (hasPrefix $img "http://") (hasPrefix $img "https://") }}
+              <img src="{{ $img | safeURL }}" alt="{{ $.Title }}" class="service-image">
+            {{ else }}
+              <img src="{{ $img | absURL | safeURL }}" alt="{{ $.Title }}" class="service-image">
+            {{ end }}
+          {{ end }}
+
+          <div class="card-content">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            {{ $fmSum := trim .Params.summary " \t\r\n" }}
+            {{ $Sum := trim .Summary " \t\r\n" }}
+            {{ $summary := or $fmSum $Sum }}
+            <p class="muted card-summary">{{ $summary | plainify }}</p>
+          </div>
+
+          <div class="service-actions">
+            <a class="btn" href="{{ .RelPermalink }}">Read more →</a>
+          </div>
         </article>
       {{ end }}
     </div>
@@ -65,8 +80,7 @@
 {{ end }}
 
 <!-- ===== Blog Section (only if there are posts) ===== -->
-{{ $posts := where .Site.RegularPages "Section" "blog" }}
-{{ $posts = first 3 $posts }}
+{{ $posts := where .Site.RegularPages "Section" "blog" | first 3 }}
 
 {{ if gt (len $posts) 0 }}
 <section class="section blog">
@@ -79,10 +93,16 @@
     <div class="grid cols-3">
       {{ range $posts }}
         <article class="card">
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-          {{ with .Params.summary }}<p class="muted">{{ . }}</p>{{ else }}<p class="muted">{{ .Summary }}</p>{{ end }}
+          <div class="card-content">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            {{ $fmSum := trim .Params.summary " \t\r\n" }}
+            {{ $Sum := trim .Summary " \t\r\n" }}
+            {{ $summary := or $fmSum $Sum }}
+            <p class="muted card-summary">{{ $summary | plainify }}</p>
+          </div>
+
           <div class="service-actions">
-            <a class="btn" href="{{ .RelPermalink }}">Read more →</a>
+            <a class="btn" href={{ .RelPermalink }}>Read more →</a>
           </div>
         </article>
       {{ end }}
