@@ -9,12 +9,14 @@
     <div class="grid cols-3">
       {{ range .Pages.ByWeight }}
         <article class="card">
-          {{ with .Params.image }}
-            {{ $img := . }}
-            {{ if or (hasPrefix $img "http://") (hasPrefix $img "https://") }}
-              <img src="{{ $img | safeURL }}" alt="{{ $.Title }}" class="service-image">
-            {{ else }}
-              <img src="{{ $img | absURL | safeURL }}" alt="{{ $.Title }}" class="service-image">
+          {{ if $.Params.image }}
+            {{ with .Params.image }}
+              {{ $img := . }}
+              {{ if or (hasPrefix $img "http://") (hasPrefix $img "https://") }}
+                <img src="{{ $img | safeURL }}" alt="{{ $.Title }}" class="service-image">
+              {{ else }}
+                <img src="{{ $img | absURL | safeURL }}" alt="{{ $.Title }}" class="service-image">
+              {{ end }}
             {{ end }}
           {{ end }}
 
