@@ -264,7 +264,7 @@ textarea.control{ resize:vertical; min-height:160px }
   margin: 0 auto 1rem;
 
   /* shrink the image inside */
-  transform: scale(0.85);       /* 85% of its normal size */
+  transform: scale(1);       /* 85% of its normal size */
   transform-origin: center top; /* keeps it centered */
 }
 
