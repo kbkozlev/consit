@@ -51,6 +51,7 @@ theme = "consit"
 [params.services]
   title = "Expertise"
   intro = "What we help with across."
+  serviceImageWidth = "100%"
 
   featured = [
     "/services/serivce1/",

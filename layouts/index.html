@@ -38,7 +38,8 @@
 {{ end }}
 
 {{ if gt (len $featured) 0 }}
-<section class="section services">
+<section class="section services"
+         style="--service-img-width: {{ or $sv.serviceImageWidth "100%" }};">
   <div class="container">
     <div class="section-head">
       <h2>{{ with $sv.title }}{{ . }}{{ else }}Services{{ end }}</h2>
@@ -102,7 +103,7 @@
           </div>
 
           <div class="service-actions">
-            <a class="btn" href={{ .RelPermalink }}>Read more →</a>
+            <a class="btn" href="{{ .RelPermalink }}">Read more →</a>
           </div>
         </article>
       {{ end }}
