@@ -262,14 +262,14 @@ textarea.control{ resize:vertical; min-height:160px }
 }
 
 .section.services .card .service-image {
-  width: 100%;              /* scale uniformly */
-  height: auto;            /* keep aspect ratio */
-  margin: 0 auto 1rem;     /* center image */
+  width: var(--service-img-width, 100%);
+  height: auto;
+  max-height: 160px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem;
   border-radius: 0.5rem;
-  object-fit: contain;     /* never stretches weirdly */
-  max-height: 160px;       /* optional: enforce same visual block height */
 }
-
 
 /* Actions pinned to bottom and always visible */
 .service-actions {
