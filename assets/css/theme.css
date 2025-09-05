@@ -237,14 +237,14 @@ textarea.control{ resize:vertical; min-height:160px }
   flex: 1;                  /* take available space above actions */
   min-height: 0;            /* allow shrinking */
   overflow: hidden;         /* clip overflowing text for the fade */
-  
+
   /* Fade out the last part of text (works in all modern browsers) */
   -webkit-mask-image: linear-gradient(180deg, #000 70%, rgba(0,0,0,0) 100%);
   mask-image: linear-gradient(180deg, #000 70%, rgba(0,0,0,0) 100%);
 }
 
 /* If you kept line-clamp, you can keep it or remove it.
-   Keeping a small clamp gives tighter previews. */
+ *   Keeping a small clamp gives tighter previews. */
 .card-summary {
   margin: 0 0 1rem 0;
   display: -webkit-box;
@@ -255,17 +255,19 @@ textarea.control{ resize:vertical; min-height:160px }
 }
 
 /* Image at top (unchanged) */
-.section.services .card .service-image {
-  width: 100%;                 /* let it span the card width */
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  border-radius: 0.5rem 0.5rem 0 0;
-  display: block;
-  margin: 0 auto 1rem;
+.section.services .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  /* shrink the image inside */
-  transform: scale(1);       /* 85% of its normal size */
-  transform-origin: center top; /* keeps it centered */
+.section.services .card .service-image {
+  width: 100%;              /* scale uniformly */
+  height: auto;            /* keep aspect ratio */
+  margin: 0 auto 1rem;     /* center image */
+  border-radius: 0.5rem;
+  object-fit: contain;     /* never stretches weirdly */
+  max-height: 160px;       /* optional: enforce same visual block height */
 }
 
 
