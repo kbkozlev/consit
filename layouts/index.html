@@ -49,14 +49,14 @@
     <div class="grid cols-3">
       {{ range $featured }}
         <article class="card">
-          {{ with .Params.image }}
-            {{ $img := . }}
-            {{ if or (hasPrefix $img "http://") (hasPrefix $img "https://") }}
-              <img src="{{ $img | safeURL }}" alt="{{ $.Title }}" class="service-image">
-            {{ else }}
-              <img src="{{ $img | absURL | safeURL }}" alt="{{ $.Title }}" class="service-image">
-            {{ end }}
+        {{ with .Params.image }}
+          {{ $img := . }}
+          {{ if or (hasPrefix $img "http://") (hasPrefix $img "https://") }}
+            <img src="{{ $img | safeURL }}" alt="{{ $.Title }}" class="service-image">
+          {{ else }}
+            <img src="{{ $img | relURL | safeURL }}" alt="{{ $.Title }}" class="service-image">
           {{ end }}
+        {{ end }}
 
           <div class="card-content">
             <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
