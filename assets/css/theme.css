@@ -256,13 +256,18 @@ textarea.control{ resize:vertical; min-height:160px }
 
 /* Image at top (unchanged) */
 .section.services .card .service-image {
-  width: 100%;
+  width: 100%;                 /* let it span the card width */
   aspect-ratio: 16/9;
   object-fit: cover;
   border-radius: 0.5rem 0.5rem 0 0;
   display: block;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
+
+  /* shrink the image inside */
+  transform: scale(0.85);       /* 85% of its normal size */
+  transform-origin: center top; /* keeps it centered */
 }
+
 
 /* Actions pinned to bottom and always visible */
 .service-actions {
