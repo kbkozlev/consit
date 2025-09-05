@@ -286,3 +286,29 @@ textarea.control{ resize:vertical; min-height:160px }
   padding: 0.5rem 1rem;
   white-space: nowrap;
 }
+
+.section.job h1 {
+  font-size: 2.25rem;   /* big heading */
+  margin-bottom: 0.5rem;
+}
+
+.section.job .job-meta {
+  margin-bottom: 1.5rem;
+}
+
+.section.job .job-meta p {
+  margin: 0.25rem 0;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 500;
+  color: #aaa; /* muted text */
+}
+
+.section.job .job-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  font-size: 0.95rem;
+  color: #666;
+  text-align: center;
+}

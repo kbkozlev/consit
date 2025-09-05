@@ -1,0 +1,42 @@
+{{ define "main" }}
+<section class="section job">
+  <div class="container">
+    <h1>{{ .Title }}</h1>
+
+    <div class="job-meta">
+
+      <p class="job-date">
+        <em><i class="fa-solid fa-calendar-days"></i> {{ .Date.Format "02 Jan 2006" }}</em>
+      </p>
+
+      {{ with .Params.location }}
+        <p class="job-location">
+          <em><i class="fa-solid fa-location-dot"></i> {{ . }}</em>
+        </p>
+      {{ end }}
+
+      {{ with .Params.workType }}
+        <p class="job-type">
+          <em><i class="fa-solid fa-briefcase"></i> {{ . }}</em>
+        </p>
+      {{ end }}
+
+      {{ with .Params.id }}
+        <p class="job-id">
+          <em><i class="fa-solid fa-id-badge"></i> {{ . }}</em>
+        </p>
+      {{ end }}
+    </div>
+
+    <div class="content">
+      {{ .Content }}
+    </div>
+
+    {{ with .Params.footer }}
+      <div class="job-footer">
+        {{ . | markdownify }}
+      </div>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
