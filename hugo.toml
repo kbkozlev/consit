@@ -3,6 +3,12 @@ languageCode = 'en-us'
 title = 'My Company'
 theme = "consit"
 
+googleAnalytics = "" #G-XXXXXX
+
+[privacy.googleAnalytics]
+disable = false
+anonymizeIP = true
+respectDoNotTrack = false
 
 [pagination]
   pagerSize = 9
