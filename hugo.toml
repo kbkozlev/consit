@@ -1,109 +1,107 @@
-baseURL = ''
+baseURL = 'https://example.com/'
 languageCode = 'en-us'
 title = 'My Company'
 theme = "consit"
 
-googleAnalytics = "" #G-XXXXXX
+[services]
+  [services.googleAnalytics]
+    id = 'G-XXXXXXXXX' 
 
-[privacy.googleAnalytics]
-disable = false
-anonymizeIP = true
-respectDoNotTrack = false
+[privacy]
+  [privacy.googleAnalytics]
+    disable = false
+    respectDoNotTrack = false
 
 [pagination]
   pagerSize = 9
 
-[params.theme]
-  color = "#0b1020"
+[params]
+  [params.theme]
+    color = "#0b1020"
 
-[params.favicon]
-  icon = "/favicon/favicon.png"
+  [params.favicon]
+    icon = "/favicon/favicon.png"
+    
+  [params.header]
+    logoIcon     = "/logo/logo.png"
+    companyName  = ""
+    logoOnly    = true
+    logoSize    = 32  
 
+    [[params.header.menu]]
+      name = "About Us"
+      url  = "/about/"
 
-[params.header]
-  logoIcon     = "/logo/logo.png"
-  companyName  = ""
-  logoOnly    = true
-  logoSize    = 32  
-
-  [[params.header.menu]]
-    name = "About Us"
-    url  = "/about/"
-
-  [[params.header.menu]]
-    name = "Services"
-    url  = "/services/"
+    [[params.header.menu]]
+      name = "Services"
+      url  = "/services/"
   
-  [[params.header.menu]]
-    name = "Blog"
-    url  = "/blog/"
+    [[params.header.menu]]
+      name = "Blog"
+      url  = "/blog/"
 
-  [[params.header.menu]]
-    name = "Contact"
-    url  = "/contact/"
+    [[params.header.menu]]
+      name = "Contact"
+      url  = "/contact/"
 
+  [params.hero]
+    title         = "My Website Title"
+    subtitle      = "Delivering  solutions with years of proven implementation and integration experience with technology."
+    primaryText   = "Contact Us"
+    primaryHref   = "/contact/"
+    secondaryText = "Learn More"
+    secondaryHref = "/about/"
 
-[params.hero]
-  title         = "My Website Title"
-  subtitle      = "Delivering  solutions with years of proven implementation and integration experience with technology."
+  [params.services]
+    title = "Expertise"
+    intro = "What we help with across."
+    serviceImageWidth = "100%"
 
-  primaryText   = "Contact Us"
-  primaryHref   = "/contact/"
-
-  secondaryText = "Learn More"
-  secondaryHref = "/about/"
-
-
-[params.services]
-  title = "Expertise"
-  intro = "What we help with across."
-  serviceImageWidth = "100%"
-
-  featured = [
-    "/services/serivce1/",
-    "/services/serivce2/",
-    "/services/serivce3/",
-    "/services/serivce4/",
-  ]
+    featured = [
+      "/services/serivce1/",
+      "/services/serivce2/",
+      "/services/serivce3/",
+      "/services/serivce4/",
+    ]
 
 
-[params.blog]
-  title = "Latest Blog Posts"
-  intro = "Insights and updates from our experts."
+  [params.blog]
+    title = "Latest Blog Posts"
+    intro = "Insights and updates from our experts."
   
-[params.footer]
-  showBrand = true
+  [params.footer]
+    showBrand = true
 
-  # Column 1
-  [[params.footer.columns]]
-    title = "Contact"
-    items = [
-      { label = "info@test.net", url = "mailto:info@test.net" },
-      { label = "+1234567890",  url = "tel:+1234567890" },
-      { label = "My address", url = "https://maps.app.goo.gl/test"}
-    ]
+    # Column 1
+    [[params.footer.columns]]
+      title = "Contact"
+      items = [
+        { label = "info@test.net", url = "mailto:info@test.net" },
+        { label = "+1234567890",  url = "tel:+1234567890" },
+        { label = "My address", url = "https://maps.app.goo.gl/test"}
+      ]
 
-  # Column 2
-  [[params.footer.columns]]
-    title = "Follow"
-    items = [
-      { label = "LinkedIn", url = "https://www.linkedin.com/company/test" },
-      { label = "Twitter",  url = "https://twitter.com/example" }
-    ]
+    # Column 2
+    [[params.footer.columns]]
+      title = "Follow"
+      items = [
+        { label = "LinkedIn", url = "https://www.linkedin.com/company/test" },
+        { label = "Twitter",  url = "https://twitter.com/example" }
+      ]
 
-  # Column 3
-  [[params.footer.columns]]
-    title = "Legal"
-    items = [
-      { label = "Privacy Policy", url = "/privacy/" },
-      { label = "Terms of Service", url = "/terms/" }
-    ]
+    # Column 3
+    [[params.footer.columns]]
+      title = "Legal"
+      items = [
+        { label = "Privacy Policy", url = "/privacy/" },
+        { label = "Terms of Service", url = "/terms/" }
+      ]
 
-[params.seo]
-  siteName           = ""    # optional override, defaults to .Site.Title
-  defaultDescription = ""    # site-wide fallback
-  defaultImage       = ""    # fallback og:image
-  twitterHandle      = ""    # e.g. "@yourhandle"
-  robotsIndex        = true
-  titleSeparator     = " | "
-  titlePattern       = "{{ if or .IsHome (eq .PageTitle .SiteTitle) }}{{ .SiteTitle }}{{ else }}{{ .PageTitle }}{{ .Sep }}{{ .SiteTitle }}{{ end }}"
+  [params.seo]
+    siteName           = ""    # optional override, defaults to .Site.Title
+    defaultDescription = ""    # site-wide fallback
+    defaultImage       = ""    # fallback og:image
+    twitterHandle      = ""    # e.g. "@yourhandle"
+    robotsIndex        = true
+    titleSeparator     = " | "
+    titlePattern       = "{{ if or .IsHome (eq .PageTitle .SiteTitle) }}{{ .SiteTitle }}{{ else }}{{ .PageTitle }}{{ .Sep }}{{ .SiteTitle }}{{ end }}"
