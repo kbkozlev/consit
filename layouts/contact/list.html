@@ -57,7 +57,8 @@
               method="POST"
               data-success="Thanks! Your message was sent."
               data-error="Oops, something went wrong."
-              data-tryagain="Please try again.">
+              data-tryagain="Please try again."
+              {{ if $form.enableCaptcha }}data-recaptcha="true"{{ end }}>
 
           <h3 style="margin-top:0">{{ .Params.formHeading }}</h3>
 
@@ -77,9 +78,17 @@
               <textarea class="control" name="message" rows="6" required></textarea></label></div>
           </div>
 
+          {{/* StaticForms expects apiKey; you previously used accessKey.
+               We'll send both names with the same value for compatibility. */}}
+          {{ with $form.accessKey }}<input type="hidden" name="apiKey"    value="{{ . }}">{{ end }}
           {{ with $form.accessKey }}<input type="hidden" name="accessKey" value="{{ . }}">{{ end }}
           {{ with $form.subject   }}<input type="hidden" name="subject"   value="{{ . }}">{{ end }}
           <input type="hidden" name="replyTo" value="{{ or $form.replyTo "@" }}">
+
+          {{ if $form.enableCaptcha }}
+            <!-- reCAPTCHA widget -->
+            <div class="g-recaptcha" data-sitekey="{{ $form.captchaSiteKey }}" style="margin:.75rem 0"></div>
+          {{ end }}
 
           <div class="form-actions">
             <button type="submit" class="btn primary">Send</button>
@@ -91,6 +100,11 @@
           <div id="contactFormMsg" class="muted" style="margin-top:.8rem" aria-live="polite"></div>
         </form>
       </div>
+
+      {{ if $form.enableCaptcha }}
+      <!-- Include reCAPTCHA JavaScript only when enabled -->
+      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      {{ end }}
 
       <script>
       (function(){
@@ -108,7 +122,15 @@
           const errorText   = form.dataset.error   || 'Something went wrong.';
           const tryAgain    = form.dataset.tryagain|| 'Please try again.';
 
+          // If captcha is enabled, require it to be solved
+          const needsCaptcha = form.getAttribute('data-recaptcha') === 'true';
+          if (needsCaptcha && window.grecaptcha && grecaptcha.getResponse().length === 0){
+            setMsg('Please complete the reCAPTCHA.', false);
+            return;
+          }
+
           const data = new FormData(form);
+          // Provide a unified "name" field for services that expect it
           const fn = (data.get('first_name')||'').trim();
           const ln = (data.get('last_name')||'').trim();
           if(!data.get('name')) data.set('name', (fn + ' ' + ln).trim());
@@ -116,10 +138,20 @@
           try{
             const resp = await fetch(form.action, { method:'POST', headers:{'Accept':'application/json'}, body:data });
             let ok = resp.ok;
-            try{ const json = await resp.json(); if(typeof json.success !== 'undefined') ok = !!json.success; }catch(_){}
-            if(ok){ setMsg(successText,true); form.reset(); if(window.grecaptcha) grecaptcha.reset(); }
-            else  { setMsg(`${errorText} ${tryAgain}`,false); }
-          }catch(_){ setMsg(`${errorText} ${tryAgain}`,false); }
+            try{
+              const json = await resp.json();
+              if(typeof json.success !== 'undefined') ok = !!json.success;
+            }catch(_){}
+            if(ok){
+              setMsg(successText,true);
+              form.reset();
+              if(window.grecaptcha) grecaptcha.reset();
+            }else{
+              setMsg(errorText + ' ' + tryAgain,false);
+            }
+          }catch(_){
+            setMsg(errorText + ' ' + tryAgain,false);
+          }
         });
       })();
       </script>
