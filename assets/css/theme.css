@@ -213,7 +213,10 @@ textarea.control{ resize:vertical; min-height:160px }
 .footer-col li{ margin-bottom:.4rem }
 .footer-col a{ color:var(--muted); text-decoration:none }
 .footer-col a:hover{ color:var(--brand) }
-.footer-copy{ margin-top:5rem; display:block }
+.footer-badges{ display:flex; align-items:center; justify-content:flex-start; text-align:left; gap:1rem; margin-top:2rem; width:100%; }
+.footer-copy{ margin-top:1.5rem; display:block }
+.footer-badges a{ display:inline-flex; align-items:center }
+.footer-badges img{ display:block; height:65px; width:auto }
 @media (max-width:900px){ .footer-right{ grid-auto-flow:row; grid-auto-columns:1fr } }
 
 

@@ -54,6 +54,28 @@
       </div>
     </div>
 
+    {{ $badges := .Site.Params.footer.badges | default (slice) }}
+    {{ $showBadges := default false .Site.Params.footer.showBadges }}
+    {{ $badgesRel := .Site.Params.footer.badgesRel | default "nofollow" }}
+    {{ $badgesTarget := .Site.Params.footer.badgesTarget | default "_blank" }}
+    {{ if and $showBadges (gt (len $badges) 0) }}
+      <div class="footer-badges">
+        {{ range $badges }}
+          {{ $url := index . "url" }}
+          {{ $img := index . "img" }}
+          {{ $alt := index . "alt" | default "" }}
+          {{ $title := index . "title" | default "" }}
+          {{ $rel := index . "rel" | default $badgesRel }}
+          {{ $target := index . "target" | default $badgesTarget }}
+          {{ if and $url $img }}
+            <a href="{{ $url }}"{{ with $rel }} rel="{{ . }}"{{ end }}{{ with $target }} target="{{ . }}"{{ end }}{{ with $title }} title="{{ . }}"{{ end }}>
+              <img border="0" src="{{ $img }}" alt="{{ $alt }}">
+            </a>
+          {{ end }}
+        {{ end }}
+      </div>
+    {{ end }}
+
     <p class="muted footer-copy">© {{ now.Year }} {{ .Site.Params.company.name | default .Site.Title }}. All rights reserved.</p>
   </div>
 </footer>

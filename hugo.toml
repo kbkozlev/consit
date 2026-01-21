@@ -73,6 +73,16 @@ respectDoNotTrack = false
   
 [params.footer]
   showBrand = true
+  showBadges = false
+  
+  badgesRel = "nofollow"
+  badgesTarget = "_blank"
+
+  [[params.footer.badges]]
+    url = ""
+    img = ""
+    alt = ""
+    title = ""
 
   # Column 1
   [[params.footer.columns]]
