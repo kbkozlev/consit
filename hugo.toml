@@ -78,11 +78,10 @@ respectDoNotTrack = false
   badgesRel = "nofollow"
   badgesTarget = "_blank"
 
-  [[params.footer.badges]]
-    url = ""
-    img = ""
-    alt = ""
-    title = ""
+  [params.footer.badges]
+    items = [
+      { url = "", img = "", alt = "", title = "" }
+    ]
 
   # Column 1
   [[params.footer.columns]]

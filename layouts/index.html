@@ -1,9 +1,24 @@
 {{ define "main" }}
 {{ $h  := .Site.Params.hero }}
 {{ $sv := .Site.Params.services }}
+{{ $heroStyle := "" }}
+{{ with $h.backgroundImage }}
+  {{ $bg := . }}
+  {{ if or (hasPrefix $bg "http://") (hasPrefix $bg "https://") }}
+    {{ $heroStyle = printf "--hero-bg-image: url('%s');" ($bg | safeURL) }}
+  {{ else }}
+    {{ $heroStyle = printf "--hero-bg-image: url('%s');" ($bg | relURL | safeURL) }}
+  {{ end }}
+{{ end }}
+{{ with $h.overlayColor }}
+  {{ $heroStyle = printf "%s --hero-overlay: %s;" $heroStyle . }}
+{{ end }}
+{{ with $h.blur }}
+  {{ $heroStyle = printf "%s --hero-blur: %s;" $heroStyle . }}
+{{ end }}
 
 <!-- ===== Hero Section ===== -->
-<section class="hero">
+<section class="hero"{{ with $heroStyle }} style="{{ . | safeCSS }}"{{ end }}>
   <div class="container">
     <h1>{{ or $h.title "Company Hero" }}</h1>
 

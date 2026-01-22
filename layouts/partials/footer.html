@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    {{ $badges := .Site.Params.footer.badges | default (slice) }}
+    {{ $badges := .Site.Params.footer.badges.items | default (slice) }}
     {{ $showBadges := default false .Site.Params.footer.showBadges }}
     {{ $badgesRel := .Site.Params.footer.badgesRel | default "nofollow" }}
     {{ $badgesTarget := .Site.Params.footer.badgesTarget | default "_blank" }}
